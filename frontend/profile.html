@@ -53,22 +53,23 @@
   <main class="profile-shell profile-main" id="profile-main">
     <div class="profile-heading">
       <h1>Mon profil</h1>
-      <span class="profile-heading-arabic" lang="ar" dir="rtl">ملفي الشخصي</span>
     </div>
 
     <div class="profile-grid">
       <section class="profile-card profile-identity" aria-labelledby="profile-name">
         <div class="profile-cover">
           <img id="profile-cover-image" src="assets/profile/riad-cover.jpg" alt="" width="1440" height="480" fetchpriority="high">
-          <button class="profile-image-trigger profile-cover-trigger" id="profile-edit-cover" type="button" aria-label="Modifier la couverture">
-            <span aria-hidden="true">+</span>
+          <button class="profile-image-trigger profile-cover-trigger" id="profile-edit-cover" type="button"
+            aria-label="Modifier la couverture" aria-haspopup="dialog" aria-controls="profile-images-dialog" title="Modifier la couverture">
+            <span class="profile-image-icon" aria-hidden="true"></span>
           </button>
         </div>
         <div class="profile-identity-content">
           <div class="profile-avatar-frame">
             <img class="profile-avatar" id="profile-avatar-image" src="assets/profile/zellige-avatar.jpg" alt="" width="88" height="88">
-            <button class="profile-image-trigger profile-avatar-trigger" id="profile-edit-avatar" type="button" aria-label="Modifier la photo de profil">
-              <span aria-hidden="true">+</span>
+            <button class="profile-image-trigger profile-avatar-trigger" id="profile-edit-avatar" type="button"
+              aria-label="Modifier la photo de profil" aria-haspopup="dialog" aria-controls="profile-images-dialog" title="Modifier la photo de profil">
+              <span class="profile-image-icon" aria-hidden="true"></span>
             </button>
           </div>
           <p class="profile-account-type" id="profile-account-type">Profil local</p>
