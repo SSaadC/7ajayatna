@@ -83,14 +83,20 @@
       <section class="profile-card profile-info" aria-labelledby="profile-info-title">
         <div class="profile-section-heading">
           <h2 id="profile-info-title">Informations</h2>
-          <span class="profile-star profile-section-star" aria-hidden="true"></span>
+          <button class="profile-button" id="profile-edit-details" type="button" aria-label="Modifier les informations"
+            aria-haspopup="dialog" aria-controls="profile-details-dialog">Modifier</button>
         </div>
         <dl class="profile-details">
           <div><dt>Pseudonyme</dt><dd id="profile-detail-name" dir="auto">Joueur</dd></div>
+          <div><dt>Nom affiché</dt><dd id="profile-detail-display-name" dir="auto">—</dd></div>
+          <div><dt>Ville ou région</dt><dd id="profile-detail-region" dir="auto">—</dd></div>
+          <div><dt>Langue préférée</dt><dd id="profile-detail-language">—</dd></div>
           <div><dt>Type de profil</dt><dd id="profile-detail-type">Invité</dd></div>
           <div id="profile-email-row" hidden><dt>Adresse e-mail</dt><dd id="profile-email" dir="auto"></dd></div>
           <div id="profile-joined-row" hidden><dt>Inscription</dt><dd id="profile-joined"></dd></div>
+          <div class="profile-details-bio"><dt>À propos</dt><dd id="profile-detail-bio" dir="auto">—</dd></div>
         </dl>
+        <p class="profile-details-status" id="profile-details-status" role="status"></p>
       </section>
 
       <section class="profile-card profile-activity" aria-labelledby="profile-activity-title">
@@ -114,6 +120,40 @@
       <div class="profile-actions profile-dialog-actions">
         <button class="profile-button" id="profile-cancel" type="button">Annuler</button>
         <button class="profile-button profile-button-primary" id="profile-save" type="submit">Enregistrer</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog class="profile-dialog" id="profile-details-dialog" aria-labelledby="profile-details-title" aria-describedby="profile-details-hint">
+    <form id="profile-details-form">
+      <h2 id="profile-details-title">Modifier les informations</h2>
+      <p class="profile-dialog-hint" id="profile-details-hint">Ces informations sont facultatives et enregistrées dans ce navigateur.</p>
+
+      <label for="profile-display-name-input">Nom affiché</label>
+      <input id="profile-display-name-input" type="text" maxlength="50" dir="auto" autofocus>
+
+      <label for="profile-region-input">Ville ou région</label>
+      <input id="profile-region-input" type="text" maxlength="60" dir="auto">
+
+      <label for="profile-language-input">Langue préférée</label>
+      <select id="profile-language-input">
+        <option value="">Choisir une langue</option>
+        <option>Darija</option>
+        <option>Arabe</option>
+        <option>Amazighe</option>
+        <option>Français</option>
+        <option>Anglais</option>
+        <option>Autre</option>
+      </select>
+
+      <label for="profile-bio-input">À propos</label>
+      <textarea id="profile-bio-input" rows="3" maxlength="240" dir="auto" aria-describedby="profile-bio-hint"></textarea>
+      <p class="profile-dialog-hint" id="profile-bio-hint">240 caractères maximum.</p>
+
+      <p class="profile-form-message" id="profile-details-message" role="alert"></p>
+      <div class="profile-actions profile-dialog-actions">
+        <button class="profile-button" id="profile-details-cancel" type="button">Annuler</button>
+        <button class="profile-button profile-button-primary" type="submit">Enregistrer</button>
       </div>
     </form>
   </dialog>

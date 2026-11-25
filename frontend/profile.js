@@ -2,6 +2,7 @@
   const gameStorageKey = '7ajayatna_state';
   const tokenStorageKey = 'token';
   const imageStoragePrefix = '7ajayatna_profile_images:';
+  const detailsStoragePrefix = '7ajayatna_profile_details:';
   const imageTypes = new Set(['image/jpeg', 'image/png', 'image/webp']);
   const maxImageBytes = 15 * 1024 * 1024;
   const loopbackHosts = ['localhost', '127.0.0.1', '[::1]'];
@@ -17,6 +18,13 @@
   const edit = element('edit');
   const save = element('save');
   const cancel = element('cancel');
+  const editDetails = element('edit-details');
+  const detailsDialog = element('details-dialog');
+  const detailFields = ['display-name', 'region', 'language', 'bio'].map(name => ({
+    name,
+    input: element(`${name}-input`),
+    output: element(`detail-${name}`)
+  }));
   const imagesDialog = element('images-dialog');
   const saveImages = element('images-save');
   const imageFields = [
@@ -36,7 +44,7 @@
       pending: null
     };
   });
-  const editButtons = [edit, ...imageFields.map(field => field.trigger)];
+  const editButtons = [edit, editDetails, ...imageFields.map(field => field.trigger)];
   let imageChanges = {};
   let imageEditKey;
   let account = null;
@@ -60,9 +68,23 @@
     }
   }
 
-  function profileImageKey() {
+  function profileStorageKey(prefix) {
     const email = account?.profile.email;
-    return `${imageStoragePrefix}${email ? `account:${email}` : 'guest'}`;
+    return `${prefix}${email ? `account:${email}` : 'guest'}`;
+  }
+
+  function readDetails() {
+    try {
+      const stored = JSON.parse(localStorage.getItem(profileStorageKey(detailsStoragePrefix)));
+      return Object.fromEntries(detailFields.map(({ name }) => [name, typeof stored?.[name] === 'string' ? stored[name] : '']));
+    } catch {
+      return {};
+    }
+  }
+
+  function renderDetails() {
+    const details = readDetails();
+    for (const { name, output } of detailFields) output.textContent = details[name] || '—';
   }
 
   function readImages(key) {
@@ -82,7 +104,7 @@
   }
 
   function renderImages() {
-    const images = readImages(profileImageKey());
+    const images = readImages(profileStorageKey(imageStoragePrefix));
     for (const field of imageFields) {
       const source = images[field.kind] || field.defaultSource;
       if (field.image.getAttribute('src') !== source) field.image.src = source;
@@ -189,6 +211,7 @@
     const correct = Math.min(answered, count(game?.totalCorrect));
 
     renderImages();
+    renderDetails();
     setText('name', name);
     setText('detail-name', name);
     setText('account-type', profile ? 'Compte joueur' : 'Profil local');
@@ -359,8 +382,39 @@
     }
   });
 
+  editDetails.addEventListener('click', () => {
+    const details = readDetails();
+    for (const { name, input } of detailFields) input.value = details[name] || '';
+    setText('details-message', '');
+    setText('details-status', '');
+    detailsDialog.showModal();
+  });
+
+  element('details-cancel').addEventListener('click', () => detailsDialog.close());
+  element('details-form').addEventListener('submit', event => {
+    event.preventDefault();
+    if (account && readToken() !== accountToken) {
+      setText('details-message', 'La session a changé. Rechargez la page.');
+      return;
+    }
+
+    const entries = detailFields.map(({ name, input }) => [name, input.value.trim()]).filter(([, value]) => value);
+    const key = profileStorageKey(detailsStoragePrefix);
+    try {
+      if (entries.length) localStorage.setItem(key, JSON.stringify(Object.fromEntries(entries)));
+      else localStorage.removeItem(key);
+    } catch {
+      setText('details-message', 'Impossible d’enregistrer les informations dans ce navigateur.');
+      return;
+    }
+
+    detailsDialog.close();
+    renderDetails();
+    setText('details-status', 'Informations enregistrées.');
+  });
+
   function openImageEditor(selectedField) {
-    imageEditKey = profileImageKey();
+    imageEditKey = profileStorageKey(imageStoragePrefix);
     const images = readImages(imageEditKey);
     imageChanges = {};
     setText('images-message', '');
@@ -420,13 +474,12 @@
   });
 
   window.addEventListener('storage', event => {
-    if (event.key === gameStorageKey && !account) render();
-    if (event.key === profileImageKey() || event.key === null) renderImages();
+    if (event.key === null || (event.key === gameStorageKey && !account)) render();
+    if (event.key === profileStorageKey(imageStoragePrefix)) renderImages();
+    if (event.key === profileStorageKey(detailsStoragePrefix)) renderDetails();
   });
   window.addEventListener('pageshow', event => {
-    if (!event.persisted) return;
-    if (account) renderImages();
-    else render();
+    if (event.persisted) render();
   });
 
   load();

@@ -21,7 +21,7 @@
 .profile-page *, .profile-page *::before, .profile-page *::after { box-sizing: border-box; }
 .profile-page [hidden] { display: none; }
 :where(.profile-page) :where(h1, h2, h3, p, dl, dd, ul) { margin: 0; }
-.profile-page :is(a, button, input):focus-visible { outline: 3px solid var(--profile-clay); outline-offset: 3px; }
+.profile-page :is(a, button, input, select, textarea):focus-visible { outline: 3px solid var(--profile-clay); outline-offset: 3px; }
 
 .profile-shell {
   inline-size: min(100% - 2rem, 70rem);
@@ -296,9 +296,13 @@
   font-size: .92rem;
 }
 
-.profile-details > div:last-of-type, .profile-details > div:nth-child(2):has(~ div[hidden]) { border-block-end: 0; }
+.profile-details > div:last-child { border-block-end: 0; }
 .profile-details dt, .profile-activity-description { color: var(--profile-muted); }
 .profile-details dd { text-align: end; font-weight: 700; overflow-wrap: anywhere; }
+.profile-details > .profile-details-bio { grid-template-columns: minmax(0, 1fr); gap: .25rem; }
+.profile-details-bio dd { text-align: start; font-weight: 400; white-space: pre-wrap; }
+.profile-details-status { margin-block-start: .5rem; color: var(--profile-green-dark); font-size: .875rem; }
+.profile-details-status:empty { margin: 0; }
 .profile-activity-description { margin-block-start: .25rem; font-size: .94rem; }
 .profile-empty {
   margin-block-start: .9rem;
@@ -339,7 +343,7 @@
 
 .profile-dialog::backdrop { background: #101e18ac; }
 .profile-dialog label { display: block; margin-block: 1rem .35rem; font-weight: 700; }
-.profile-dialog input {
+.profile-dialog :is(input, select, textarea) {
   inline-size: 100%;
   min-block-size: 2.75rem;
   padding: .5rem .7rem;
@@ -350,6 +354,8 @@
   font: inherit;
 }
 
+.profile-dialog textarea { display: block; resize: vertical; }
+.profile-dialog-hint { margin-block-start: .4rem; color: var(--profile-muted); font-size: .875rem; }
 .profile-form-message { min-block-size: 1.3rem; margin-block-start: .35rem; color: var(--profile-clay); font-size: .875rem; }
 .profile-dialog-actions { justify-content: end; margin-block-start: .5rem; }
 
