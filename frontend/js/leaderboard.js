@@ -56,7 +56,9 @@ function renderLeaderboard(players, myId) {
         name.textContent = player.username; // textContent : pas d'injection HTML possible
         nameCell.appendChild(name);
 
-        row.insertCell().textContent = player.total_points;
+        const points = row.insertCell();
+        points.className = 'lb-points';
+        points.textContent = player.total_points;
         row.insertCell().textContent = player.games_played;
     });
 }
@@ -73,6 +75,8 @@ async function loadMe() {
         const el = document.getElementById('lb-my-rank');
         el.textContent = `Ta position : #${me.rank} sur ${me.total_players} joueurs (${me.total_points} pts)`;
         el.hidden = false;
+        document.getElementById('lb-header-score').textContent = me.total_points;
+        document.getElementById('lb-score-pill').hidden = false;
         return me;
     } catch (error) {
         console.error('Rang joueur :', error);

@@ -20,7 +20,9 @@ async function loadWelcome() {
         });
         if (!response.ok) return;
         const me = await response.json();
-        document.getElementById('menu-welcome').textContent = `Mar7ba ${me.username} ! (#${me.rank}, ${me.total_points} pts)`;
+        document.getElementById('menu-welcome').textContent = `Mar7ba ${me.username} ! Tu es #${me.rank} au classement.`;
+        document.getElementById('lb-header-score').textContent = me.total_points;
+        document.getElementById('lb-score-pill').hidden = false;
     } catch (error) {
         console.error('Menu :', error);
     }
