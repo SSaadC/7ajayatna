@@ -1,16 +1,9 @@
 (() => {
-  const gameStorageKey = '7ajayatna_state';
-  const tokenStorageKey = 'token';
+  const { gameStorageKey, readGameState, readToken, count, formatDate, numberFormat, requestProfile } = ProfileData;
   const imageStoragePrefix = '7ajayatna_profile_images:';
   const detailsStoragePrefix = '7ajayatna_profile_details:';
   const imageTypes = new Set(['image/jpeg', 'image/png', 'image/webp']);
   const maxImageBytes = 15 * 1024 * 1024;
-  const loopbackHosts = ['localhost', '127.0.0.1', '[::1]'];
-  const profileApi = loopbackHosts.includes(location.hostname) && location.protocol === 'http:'
-    ? `http://${location.hostname}:3000/api/profile`
-    : '/api/profile';
-  const numberFormat = new Intl.NumberFormat('fr-MA');
-  const dateFormat = new Intl.DateTimeFormat('fr-MA', { dateStyle: 'medium' });
   const element = id => document.getElementById(`profile-${id}`);
   const setText = (id, value) => { element(id).textContent = value; };
   const dialog = element('dialog');
@@ -20,8 +13,6 @@
   const cancel = element('cancel');
   const editDetails = element('edit-details');
   const detailsDialog = element('details-dialog');
-  const openHistory = element('open-history');
-  const historyDialog = element('history-dialog');
   const detailFields = ['display-name', 'region', 'language', 'bio'].map(name => ({
     name,
     input: element(`${name}-input`),
@@ -46,29 +37,12 @@
       pending: null
     };
   });
-  const profileActions = [edit, editDetails, openHistory, ...imageFields.map(field => field.trigger)];
+  const profileActions = [edit, editDetails, ...imageFields.map(field => field.trigger)];
   let imageChanges = {};
   let imageEditKey;
   let account = null;
   let accountToken = null;
   let accountWarning = '';
-
-  function readGameState() {
-    try {
-      const saved = JSON.parse(localStorage.getItem(gameStorageKey));
-      return saved && typeof saved === 'object' && !Array.isArray(saved) ? saved : {};
-    } catch {
-      return {};
-    }
-  }
-
-  function readToken() {
-    try {
-      return localStorage.getItem(tokenStorageKey);
-    } catch {
-      return null;
-    }
-  }
 
   function profileStorageKey(prefix) {
     const email = account?.profile.email;
@@ -186,16 +160,6 @@
     updateImageSave();
   }
 
-  function count(value) {
-    return Number.isSafeInteger(value) && value >= 0 ? value : 0;
-  }
-
-  function formatDate(value) {
-    if (!value) return '—';
-    const date = new Date(value);
-    return Number.isFinite(date.getTime()) ? dateFormat.format(date) : '—';
-  }
-
   function render() {
     const game = account ? null : readGameState();
     const profile = account?.profile;
@@ -244,23 +208,19 @@
     progress.value = next ? Math.min(points, progress.max) : 1;
     progress.setAttribute('aria-label', next ? 'Progression vers le prochain niveau' : 'Tous les niveaux débloqués');
 
-    const entries = profile ? account.sessions : game.history;
-    renderActivity('activity', entries, Boolean(profile));
-    if (historyDialog.open) renderActivity('history', entries, Boolean(profile));
+    renderActivity(profile ? account.sessions : game.history, Boolean(profile));
   }
 
-  function renderActivity(view, entries, isAccount) {
-    const list = element(`${view}-list`);
-    const empty = element(`${view}-empty`);
-    const fullHistory = view === 'history';
+  function renderActivity(entries, isAccount) {
+    const list = element('activity-list');
+    const empty = element('activity-empty');
     list.replaceChildren();
-    setText(`${view}-description`, isAccount ? 'Vos dernières parties' : 'Vos dernières devinettes');
+    setText('activity-description', isAccount ? 'Vos dernières parties' : 'Vos dernières devinettes');
     empty.textContent = isAccount
       ? 'Les parties enregistrées sur votre compte apparaîtront ici.'
       : 'Vos premières réponses apparaîtront ici après une partie.';
 
-    const limit = fullHistory ? 50 : 5;
-    const recent = Array.isArray(entries) ? entries.filter(entry => entry && typeof entry === 'object').slice(0, limit) : [];
+    const recent = Array.isArray(entries) ? entries.filter(entry => entry && typeof entry === 'object').slice(0, 5) : [];
     for (const entry of recent) {
       const item = document.createElement('li');
       item.className = 'profile-activity-item';
@@ -281,12 +241,6 @@
         ? `${numberFormat.format(count(entry.riddles_answered))} ${entry.riddles_answered === 1 ? 'réponse' : 'réponses'}`
         : [entry.isCorrect ? 'Réussie' : 'Manquée', entry.date].filter(Boolean).join(' · ');
       details.append(title, meta);
-      if (fullHistory && !isAccount && entry.solution) {
-        const solution = document.createElement('p');
-        solution.className = 'profile-activity-meta';
-        solution.textContent = `Réponse attendue · ${entry.solution}`;
-        details.append(solution);
-      }
 
       const score = document.createElement('span');
       score.className = 'profile-activity-points';
@@ -297,21 +251,6 @@
 
     list.hidden = recent.length === 0;
     empty.hidden = recent.length !== 0;
-  }
-
-  async function requestProfile(token, username) {
-    const headers = { Authorization: `Bearer ${token}` };
-    const options = { headers, redirect: 'error', signal: AbortSignal.timeout(7000) };
-    if (username !== undefined) {
-      headers['Content-Type'] = 'application/json';
-      options.method = 'PATCH';
-      options.body = JSON.stringify({ username });
-    }
-
-    const response = await fetch(profileApi, options);
-    const result = await response.json();
-    if (!response.ok) throw new Error(result.message || 'Le compte est indisponible.');
-    return result;
   }
 
   async function load() {
@@ -340,12 +279,6 @@
     input.setAttribute('aria-invalid', 'true');
     setText('form-message', message);
   }
-
-  openHistory.addEventListener('click', () => {
-    const entries = account ? account.sessions : readGameState().history;
-    renderActivity('history', entries, Boolean(account));
-    historyDialog.showModal();
-  });
 
   edit.addEventListener('click', () => {
     input.maxLength = account ? 50 : 20;

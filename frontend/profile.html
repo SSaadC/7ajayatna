@@ -9,6 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&amp;family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&amp;family=Amiri:wght@400;700&amp;display=swap" rel="stylesheet">
   <link rel="stylesheet" href="profile.css">
   <script defer src="data.js"></script>
+  <script defer src="profile-data.js"></script>
   <script defer src="profile.js"></script>
   <script defer src="profile-sound.js"></script>
 </head>
@@ -25,11 +26,10 @@
           <svg class="profile-nav-symbol" viewBox="0 0 24 24" aria-hidden="true"><path d="m8 5 12 7-12 7z"/></svg>
           <span class="profile-nav-label">Jouer</span>
         </a>
-        <button class="profile-nav-link" id="profile-open-history" type="button" aria-label="Historique"
-          aria-haspopup="dialog" aria-controls="profile-history-dialog" title="Historique">
+        <a class="profile-nav-link" href="history.html" aria-label="Historique" title="Historique">
           <svg class="profile-nav-symbol" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 7.5V12l3 2"/></svg>
           <span class="profile-nav-label">Historique</span>
-        </button>
+        </a>
         <button class="profile-nav-link profile-nav-icon" id="profile-sound" type="button" aria-label="Couper le son du jeu"
           aria-pressed="false" title="Couper le son du jeu">
           <svg class="profile-nav-symbol" viewBox="0 0 24 24" aria-hidden="true">
@@ -127,7 +127,7 @@
       <section class="profile-card profile-activity" aria-labelledby="profile-activity-title">
         <div class="profile-section-heading">
           <h2 id="profile-activity-title">Activité récente</h2>
-          <span class="profile-star profile-section-star" aria-hidden="true"></span>
+          <a class="profile-button" href="history.html" aria-label="Voir tout l’historique">Voir tout</a>
         </div>
         <p class="profile-activity-description" id="profile-activity-description">Vos dernières devinettes</p>
         <ul class="profile-activity-list" id="profile-activity-list" hidden></ul>
@@ -135,16 +135,6 @@
       </section>
     </div>
   </main>
-
-  <dialog class="profile-dialog profile-history-dialog" id="profile-history-dialog" aria-labelledby="profile-history-title">
-    <form class="profile-section-heading" method="dialog">
-      <h2 id="profile-history-title">Historique</h2>
-      <button class="profile-button" type="submit" autofocus>Fermer</button>
-    </form>
-    <p class="profile-activity-description" id="profile-history-description">Vos devinettes</p>
-    <ul class="profile-activity-list" id="profile-history-list" hidden></ul>
-    <p class="profile-empty" id="profile-history-empty">Vos premières réponses apparaîtront ici après une partie.</p>
-  </dialog>
 
   <dialog class="profile-dialog" id="profile-dialog" aria-labelledby="profile-dialog-title">
     <form id="profile-form">

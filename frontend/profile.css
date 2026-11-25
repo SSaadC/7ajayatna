@@ -426,7 +426,7 @@
 .profile-form-message { min-block-size: 1.3rem; margin-block-start: .35rem; color: var(--profile-clay); font-size: .875rem; }
 .profile-dialog-actions { justify-content: end; margin-block-start: .5rem; }
 
-.profile-images-dialog, .profile-history-dialog { inline-size: min(34rem, calc(100% - 2rem)); }
+.profile-images-dialog { inline-size: min(34rem, calc(100% - 2rem)); }
 .profile-images-hint { margin-block: .4rem .75rem; color: var(--profile-muted); font-size: .9rem; }
 .profile-image-field { padding-block-end: .7rem; border-block-end: 1px solid var(--profile-border); }
 .profile-image-field label { margin-block-start: .75rem; }
