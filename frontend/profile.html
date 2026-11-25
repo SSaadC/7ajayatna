@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="profile.css">
   <script defer src="data.js"></script>
   <script defer src="profile.js"></script>
+  <script defer src="profile-sound.js"></script>
 </head>
 <body class="profile-page">
   <a class="profile-skip" href="#profile-main">Aller au contenu</a>
@@ -17,12 +18,35 @@
     <div class="profile-shell profile-header-inner">
       <a class="profile-brand" href="game.html">
         <span class="profile-brand-mark" aria-hidden="true"><span class="profile-star"></span></span>
-        <span>7ajayatna<span class="profile-brand-arabic" lang="ar" dir="rtl">حجاياتنا</span></span>
+        <span>7ajayatna<span class="profile-brand-caption"><span class="profile-brand-arabic" lang="ar" dir="rtl">حجاياتنا</span><span>Devinettes du Maroc</span></span></span>
       </a>
       <nav class="profile-nav" aria-label="Navigation principale">
-        <a class="profile-nav-link" href="game.html">Le jeu</a>
-        <a class="profile-nav-link" href="profile.html" aria-current="page">Mon profil</a>
+        <a class="profile-nav-link" href="game.html" aria-label="Jouer" title="Jouer">
+          <svg class="profile-nav-symbol" viewBox="0 0 24 24" aria-hidden="true"><path d="m8 5 12 7-12 7z"/></svg>
+          <span class="profile-nav-label">Jouer</span>
+        </a>
+        <button class="profile-nav-link" id="profile-open-history" type="button" aria-label="Historique"
+          aria-haspopup="dialog" aria-controls="profile-history-dialog" title="Historique">
+          <svg class="profile-nav-symbol" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 7.5V12l3 2"/></svg>
+          <span class="profile-nav-label">Historique</span>
+        </button>
+        <button class="profile-nav-link profile-nav-icon" id="profile-sound" type="button" aria-label="Couper le son du jeu"
+          aria-pressed="false" title="Couper le son du jeu">
+          <svg class="profile-nav-symbol" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M3 9v6h4l5 4V5L7 9z"/>
+            <path class="profile-sound-waves" d="M16 9a4 4 0 0 1 0 6m3-9a8 8 0 0 1 0 12"/>
+            <path class="profile-sound-cross" d="m16 9 6 6m0-6-6 6"/>
+          </svg>
+        </button>
       </nav>
+      <div class="profile-header-tools">
+        <div class="profile-header-score">
+          <span>Score</span><strong id="profile-header-score">0</strong><span class="profile-star profile-score-star" aria-hidden="true"></span>
+        </div>
+        <a class="profile-nav-link profile-nav-icon" href="profile.html" aria-current="page" aria-label="Mon profil" title="Mon profil">
+          <svg class="profile-nav-symbol" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.2"/><path d="M5 20v-1a5 5 0 0 1 5-5h4a5 5 0 0 1 5 5v1"/></svg>
+        </a>
+      </div>
     </div>
   </header>
 
@@ -106,10 +130,20 @@
         </div>
         <p class="profile-activity-description" id="profile-activity-description">Vos dernières devinettes</p>
         <ul class="profile-activity-list" id="profile-activity-list" hidden></ul>
-        <p class="profile-empty" id="profile-empty">Vos premières réponses apparaîtront ici après une partie.</p>
+        <p class="profile-empty" id="profile-activity-empty">Vos premières réponses apparaîtront ici après une partie.</p>
       </section>
     </div>
   </main>
+
+  <dialog class="profile-dialog profile-history-dialog" id="profile-history-dialog" aria-labelledby="profile-history-title">
+    <form class="profile-section-heading" method="dialog">
+      <h2 id="profile-history-title">Historique</h2>
+      <button class="profile-button" type="submit" autofocus>Fermer</button>
+    </form>
+    <p class="profile-activity-description" id="profile-history-description">Vos devinettes</p>
+    <ul class="profile-activity-list" id="profile-history-list" hidden></ul>
+    <p class="profile-empty" id="profile-history-empty">Vos premières réponses apparaîtront ici après une partie.</p>
+  </dialog>
 
   <dialog class="profile-dialog" id="profile-dialog" aria-labelledby="profile-dialog-title">
     <form id="profile-form">

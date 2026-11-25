@@ -20,6 +20,8 @@
   const cancel = element('cancel');
   const editDetails = element('edit-details');
   const detailsDialog = element('details-dialog');
+  const openHistory = element('open-history');
+  const historyDialog = element('history-dialog');
   const detailFields = ['display-name', 'region', 'language', 'bio'].map(name => ({
     name,
     input: element(`${name}-input`),
@@ -44,7 +46,7 @@
       pending: null
     };
   });
-  const editButtons = [edit, editDetails, ...imageFields.map(field => field.trigger)];
+  const profileActions = [edit, editDetails, openHistory, ...imageFields.map(field => field.trigger)];
   let imageChanges = {};
   let imageEditKey;
   let account = null;
@@ -224,7 +226,9 @@
     setText('email', profile?.email || '—');
     setText('joined', formatDate(profile?.created_at));
 
-    setText('points', numberFormat.format(points));
+    const formattedPoints = numberFormat.format(points);
+    setText('points', formattedPoints);
+    setText('header-score', formattedPoints);
     setText('level-count', `${openLevels.length} / ${LEVELS_DATA.length}`);
     setText('stat-label', profile ? 'Parties jouées' : 'Réussite');
     setText('stat-value', profile
@@ -240,18 +244,23 @@
     progress.value = next ? Math.min(points, progress.max) : 1;
     progress.setAttribute('aria-label', next ? 'Progression vers le prochain niveau' : 'Tous les niveaux débloqués');
 
-    renderActivity(profile ? account.sessions : game.history, Boolean(profile));
+    const entries = profile ? account.sessions : game.history;
+    renderActivity('activity', entries, Boolean(profile));
+    if (historyDialog.open) renderActivity('history', entries, Boolean(profile));
   }
 
-  function renderActivity(entries, isAccount) {
-    const list = element('activity-list');
+  function renderActivity(view, entries, isAccount) {
+    const list = element(`${view}-list`);
+    const empty = element(`${view}-empty`);
+    const fullHistory = view === 'history';
     list.replaceChildren();
-    setText('activity-description', isAccount ? 'Vos dernières parties' : 'Vos dernières devinettes');
-    setText('empty', isAccount
+    setText(`${view}-description`, isAccount ? 'Vos dernières parties' : 'Vos dernières devinettes');
+    empty.textContent = isAccount
       ? 'Les parties enregistrées sur votre compte apparaîtront ici.'
-      : 'Vos premières réponses apparaîtront ici après une partie.');
+      : 'Vos premières réponses apparaîtront ici après une partie.';
 
-    const recent = Array.isArray(entries) ? entries.filter(entry => entry && typeof entry === 'object').slice(0, 5) : [];
+    const limit = fullHistory ? 50 : 5;
+    const recent = Array.isArray(entries) ? entries.filter(entry => entry && typeof entry === 'object').slice(0, limit) : [];
     for (const entry of recent) {
       const item = document.createElement('li');
       item.className = 'profile-activity-item';
@@ -272,6 +281,12 @@
         ? `${numberFormat.format(count(entry.riddles_answered))} ${entry.riddles_answered === 1 ? 'réponse' : 'réponses'}`
         : [entry.isCorrect ? 'Réussie' : 'Manquée', entry.date].filter(Boolean).join(' · ');
       details.append(title, meta);
+      if (fullHistory && !isAccount && entry.solution) {
+        const solution = document.createElement('p');
+        solution.className = 'profile-activity-meta';
+        solution.textContent = `Réponse attendue · ${entry.solution}`;
+        details.append(solution);
+      }
 
       const score = document.createElement('span');
       score.className = 'profile-activity-points';
@@ -281,7 +296,7 @@
     }
 
     list.hidden = recent.length === 0;
-    element('empty').hidden = recent.length !== 0;
+    empty.hidden = recent.length !== 0;
   }
 
   async function requestProfile(token, username) {
@@ -306,7 +321,7 @@
       return;
     }
 
-    for (const button of editButtons) button.disabled = true;
+    for (const button of profileActions) button.disabled = true;
     setText('account-note', 'Chargement de votre compte…');
     try {
       const current = await requestProfile(token);
@@ -316,7 +331,7 @@
     } catch {
       accountWarning = 'Compte indisponible. La progression affichée vient de cet appareil.';
     } finally {
-      for (const button of editButtons) button.disabled = false;
+      for (const button of profileActions) button.disabled = false;
       render();
     }
   }
@@ -325,6 +340,12 @@
     input.setAttribute('aria-invalid', 'true');
     setText('form-message', message);
   }
+
+  openHistory.addEventListener('click', () => {
+    const entries = account ? account.sessions : readGameState().history;
+    renderActivity('history', entries, Boolean(account));
+    historyDialog.showModal();
+  });
 
   edit.addEventListener('click', () => {
     input.maxLength = account ? 50 : 20;
