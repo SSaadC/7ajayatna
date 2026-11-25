@@ -21,6 +21,10 @@ app.get('/api/health', async (req, res) => {
     }
 });
 
+// Routes de l'application
+const authRoutes = require('./routes/auth');
+app.use('/api/auth', authRoutes);
+
 // Démarrage du serveur
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
