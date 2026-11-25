@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mon profil · 7ajayatna</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&amp;family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&amp;family=Amiri:wght@400;700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="profile.css">
+  <script defer src="data.js"></script>
+  <script defer src="profile.js"></script>
+</head>
+<body class="profile-page">
+  <a class="profile-skip" href="#profile-main">Aller au contenu</a>
+  <header class="profile-header">
+    <div class="profile-shell profile-header-inner">
+      <a class="profile-brand" href="game.html">
+        <span class="profile-brand-mark" aria-hidden="true"><span class="profile-star"></span></span>
+        <span>7ajayatna<span class="profile-brand-arabic" lang="ar" dir="rtl">حجاياتنا</span></span>
+      </a>
+      <nav class="profile-nav" aria-label="Navigation principale">
+        <a class="profile-nav-link" href="game.html">Le jeu</a>
+        <a class="profile-nav-link" href="profile.html" aria-current="page">Mon profil</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="profile-shell profile-main" id="profile-main">
+    <div class="profile-heading">
+      <h1>Mon profil</h1>
+      <span class="profile-heading-arabic" lang="ar" dir="rtl">ملفي الشخصي</span>
+    </div>
+
+    <div class="profile-grid">
+      <section class="profile-card profile-identity" aria-labelledby="profile-name">
+        <div class="profile-cover" aria-hidden="true">
+          <img src="assets/profile/riad-cover.jpg" alt="" width="1440" height="480" fetchpriority="high">
+        </div>
+        <div class="profile-identity-content">
+          <img class="profile-avatar" src="assets/profile/zellige-avatar.jpg" alt="" width="88" height="88">
+          <p class="profile-account-type" id="profile-account-type">Profil local</p>
+          <h2 id="profile-name" dir="auto">Joueur</h2>
+          <p class="profile-account-note" id="profile-account-note" role="status">Votre progression est enregistrée sur cet appareil.</p>
+          <div class="profile-actions">
+            <a class="profile-button profile-button-primary" href="game.html">Jouer <span aria-hidden="true">↗</span></a>
+            <button class="profile-button" id="profile-edit" type="button">Modifier le profil</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="profile-card profile-progress-card" aria-labelledby="profile-progress-title">
+        <div class="profile-section-heading">
+          <h2 id="profile-progress-title">Ma progression</h2>
+          <span class="profile-star profile-section-star" aria-hidden="true"></span>
+        </div>
+        <dl class="profile-stats">
+          <div><dt>Points</dt><dd id="profile-points">0</dd></div>
+          <div><dt>Niveaux ouverts</dt><dd id="profile-level-count">1 / 3</dd></div>
+          <div><dt id="profile-stat-label">Réussite</dt><dd id="profile-stat-value">—</dd></div>
+        </dl>
+        <div class="profile-milestone">
+          <div class="profile-milestone-heading">
+            <div>
+              <p id="profile-milestone-label">Prochain niveau</p>
+              <h3 id="profile-milestone-title">Mtwassat</h3>
+            </div>
+            <span class="profile-star profile-milestone-star" aria-hidden="true"></span>
+          </div>
+          <progress id="profile-level-progress" aria-label="Progression vers le prochain niveau" value="0" max="60"></progress>
+          <p class="profile-milestone-detail" id="profile-milestone-detail">0 / 60 points</p>
+        </div>
+      </section>
+
+      <section class="profile-card profile-info" aria-labelledby="profile-info-title">
+        <div class="profile-section-heading">
+          <h2 id="profile-info-title">Informations</h2>
+          <span class="profile-star profile-section-star" aria-hidden="true"></span>
+        </div>
+        <dl class="profile-details">
+          <div><dt>Pseudonyme</dt><dd id="profile-detail-name" dir="auto">Joueur</dd></div>
+          <div><dt>Type de profil</dt><dd id="profile-detail-type">Invité</dd></div>
+          <div id="profile-email-row" hidden><dt>Adresse e-mail</dt><dd id="profile-email" dir="auto"></dd></div>
+          <div id="profile-joined-row" hidden><dt>Inscription</dt><dd id="profile-joined"></dd></div>
+        </dl>
+      </section>
+
+      <section class="profile-card profile-activity" aria-labelledby="profile-activity-title">
+        <div class="profile-section-heading">
+          <h2 id="profile-activity-title">Activité récente</h2>
+          <span class="profile-star profile-section-star" aria-hidden="true"></span>
+        </div>
+        <p class="profile-activity-description" id="profile-activity-description">Vos dernières devinettes</p>
+        <ul class="profile-activity-list" id="profile-activity-list" hidden></ul>
+        <p class="profile-empty" id="profile-empty">Vos premières réponses apparaîtront ici après une partie.</p>
+      </section>
+    </div>
+  </main>
+
+  <dialog class="profile-dialog" id="profile-dialog" aria-labelledby="profile-dialog-title">
+    <form id="profile-form">
+      <h2 id="profile-dialog-title">Modifier le profil</h2>
+      <label for="profile-username">Pseudonyme</label>
+      <input id="profile-username" name="username" type="text" maxlength="20" autocomplete="nickname" aria-describedby="profile-form-message" required autofocus dir="auto">
+      <p class="profile-form-message" id="profile-form-message" role="alert"></p>
+      <div class="profile-actions profile-dialog-actions">
+        <button class="profile-button" id="profile-cancel" type="button">Annuler</button>
+        <button class="profile-button profile-button-primary" id="profile-save" type="submit">Enregistrer</button>
+      </div>
+    </form>
+  </dialog>
+</body>
+</html>
