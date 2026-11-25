@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>7ajayatna - Classement</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="lb-body">
+    <header class="lb-header">
+        <h1 class="lb-logo"><a href="index.html">7ajayatna</a></h1>
+        <p class="lb-tagline">Classement général des joueurs</p>
+    </header>
+
+    <main class="lb-page">
+        <section class="lb-card">
+            <div class="lb-top">
+                <h2>Classement</h2>
+                <select id="lb-limit" aria-label="Nombre de joueurs affichés">
+                    <option value="10" selected>Top 10</option>
+                    <option value="25">Top 25</option>
+                    <option value="50">Top 50</option>
+                </select>
+            </div>
+
+            <p id="lb-my-rank" class="lb-my-rank" hidden></p>
+
+            <table class="lb-table">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Joueur</th>
+                        <th scope="col">Points</th>
+                        <th scope="col">Parties</th>
+                    </tr>
+                </thead>
+                <tbody id="lb-body">
+                    <tr><td colspan="4" class="lb-status">Chargement...</td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <p class="lb-back"><a href="index.html" class="lb-btn">← Retour au menu</a></p>
+    </main>
+
+    <script src="js/leaderboard.js"></script>
+</body>
+</html>

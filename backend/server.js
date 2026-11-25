@@ -21,6 +21,9 @@ app.get('/api/health', async (req, res) => {
     }
 });
 
+// Routes de l'API
+app.use('/api/leaderboard', require('./routes/leaderboard')); // [Imad] Classement général
+
 // Démarrage du serveur
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
