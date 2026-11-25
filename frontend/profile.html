@@ -36,10 +36,17 @@
       <section class="profile-card profile-identity" aria-labelledby="profile-name">
         <div class="profile-cover">
           <img id="profile-cover-image" src="assets/profile/riad-cover.jpg" alt="" width="1440" height="480" fetchpriority="high">
-          <button class="profile-button profile-cover-edit" id="profile-edit-images" type="button">Modifier les images</button>
+          <button class="profile-image-trigger profile-cover-trigger" id="profile-edit-cover" type="button" aria-label="Modifier la couverture">
+            <span aria-hidden="true">+</span>
+          </button>
         </div>
         <div class="profile-identity-content">
-          <img class="profile-avatar" id="profile-avatar-image" src="assets/profile/zellige-avatar.jpg" alt="" width="88" height="88">
+          <div class="profile-avatar-frame">
+            <img class="profile-avatar" id="profile-avatar-image" src="assets/profile/zellige-avatar.jpg" alt="" width="88" height="88">
+            <button class="profile-image-trigger profile-avatar-trigger" id="profile-edit-avatar" type="button" aria-label="Modifier la photo de profil">
+              <span aria-hidden="true">+</span>
+            </button>
+          </div>
           <p class="profile-account-type" id="profile-account-type">Profil local</p>
           <h2 id="profile-name" dir="auto">Joueur</h2>
           <p class="profile-account-note" id="profile-account-note" role="status">Votre progression est enregistrée sur cet appareil.</p>
@@ -120,7 +127,7 @@
         <label for="profile-avatar-file">Photo de profil</label>
         <div class="profile-avatar-editor">
           <img class="profile-image-preview profile-avatar-preview" id="profile-avatar-preview" src="assets/profile/zellige-avatar.jpg" alt="Aperçu de la photo de profil" width="72" height="72">
-          <input id="profile-avatar-file" type="file" accept="image/jpeg,image/png,image/webp" aria-describedby="profile-avatar-message" autofocus>
+          <input id="profile-avatar-file" type="file" accept="image/jpeg,image/png,image/webp" aria-describedby="profile-avatar-message">
         </div>
         <p class="profile-image-message" id="profile-avatar-message" role="status"></p>
         <button class="profile-button profile-image-reset" id="profile-avatar-reset" type="button" hidden>Rétablir l’avatar</button>

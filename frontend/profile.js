@@ -17,7 +17,6 @@
   const edit = element('edit');
   const save = element('save');
   const cancel = element('cancel');
-  const editImages = element('edit-images');
   const imagesDialog = element('images-dialog');
   const saveImages = element('images-save');
   const imageFields = [
@@ -28,6 +27,7 @@
     return {
       ...field,
       image,
+      trigger: element(`edit-${field.kind}`),
       defaultSource: image.getAttribute('src'),
       fileInput: element(`${field.kind}-file`),
       preview: element(`${field.kind}-preview`),
@@ -36,6 +36,7 @@
       pending: null
     };
   });
+  const editButtons = [edit, ...imageFields.map(field => field.trigger)];
   let imageChanges = {};
   let imageEditKey;
   let account = null;
@@ -282,7 +283,7 @@
       return;
     }
 
-    edit.disabled = editImages.disabled = true;
+    for (const button of editButtons) button.disabled = true;
     setText('account-note', 'Chargement de votre compte…');
     try {
       const current = await requestProfile(token);
@@ -292,7 +293,7 @@
     } catch {
       accountWarning = 'Compte indisponible. La progression affichée vient de cet appareil.';
     } finally {
-      edit.disabled = editImages.disabled = false;
+      for (const button of editButtons) button.disabled = false;
       render();
     }
   }
@@ -358,7 +359,7 @@
     }
   });
 
-  editImages.addEventListener('click', () => {
+  function openImageEditor(selectedField) {
     imageEditKey = profileImageKey();
     const images = readImages(imageEditKey);
     imageChanges = {};
@@ -372,10 +373,12 @@
     }
     updateImageSave();
     imagesDialog.showModal();
-  });
+    selectedField.fileInput.focus();
+  }
 
   element('images-cancel').addEventListener('click', () => imagesDialog.close());
   for (const field of imageFields) {
+    field.trigger.addEventListener('click', () => openImageEditor(field));
     field.fileInput.addEventListener('change', () => selectImage(field));
     field.reset.addEventListener('click', () => {
       field.pending = null;
