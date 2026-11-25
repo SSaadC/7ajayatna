@@ -11,6 +11,9 @@ const app = express();
 app.use(cors()); // Autorise le frontend (HTML/JS) à appeler ce serveur
 app.use(express.json()); // Permet au serveur de lire les données JSON envoyées dans req.body
 
+const path = require('path');
+app.use(express.static(path.join(__dirname, '../frontend')));
+
 // Route de test rapide
 app.get('/api/health', async (req, res) => {
     try {
