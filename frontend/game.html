@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>7ajayatna (حجاياتنا) – Jeu de Devinettes Marocaines</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Nunito:wght@400;600;700;800;900&family=Orbitron:wght@700;900&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+<!-- Fond géométrique subtil Zellige -->
+<div class="bg-pattern"></div>
+
+<!-- ===========================
+     EN-TÊTE DU SITE (HEADER)
+     =========================== -->
+<header class="site-header">
+  <div class="header-inner">
+    <div class="logo">
+      <span class="logo-symbol">۞</span>
+      <div class="logo-titles">
+        <span class="logo-main">7ajayatna</span>
+        <span class="logo-sub">حجاياتنا · Devinettes du Maroc</span>
+      </div>
+    </div>
+    
+    <nav class="header-nav">
+      <button class="nav-btn active" id="btnNavGame">🎮 Jouer</button>
+      <button class="nav-btn" id="btnOpenHistory">📜 Historique</button>
+      <button class="nav-btn icon-btn" id="soundToggle" title="Couper/Activer le son">🔊</button>
+    </nav>
+
+    <div class="header-score-pill">
+      <span class="pill-label">Score</span>
+      <span class="pill-value" id="headerScore">0</span>
+      <span class="pill-star">★</span>
+    </div>
+  </div>
+</header>
+
+<!-- ===========================
+     CORPS DE L'APPLICATION
+     =========================== -->
+<main id="app">
+
+  <!-- ÉCRAN 1 : ACCUEIL ET SÉLECTION DES NIVEAUX -->
+  <section class="screen active" id="screenHome">
+    <div class="home-hero">
+      <div class="hero-badge">🇲🇦 Plateforme Culturelle Intelligente · Version 0.1</div>
+      <h1 class="hero-title">7ajitek Ma Jitek...</h1>
+      <p class="hero-sub">
+        (حجيتك ما جيتك) – Redécouvrez le génie, l'humour et la poésie des devinettes traditionnelles marocaines en Darija et en Français.
+      </p>
+    </div>
+
+    <!-- Profil rapide du joueur -->
+    <div class="player-setup card">
+      <div class="setup-header">
+        <span class="setup-icon">👤</span>
+        <label class="setup-label" for="playerName">Votre pseudonyme de joueur</label>
+      </div>
+      <div class="setup-row">
+        <input type="text" id="playerName" class="text-input" placeholder="Ex: Amine_INPT, Yasmine..." maxlength="20" />
+        <button class="btn btn-primary" id="btnStartSetup">Enregistrer</button>
+      </div>
+    </div>
+
+    <!-- Grille des 3 niveaux (Conforme au Cahier des Charges) -->
+    <div class="levels-section">
+      <div class="section-header-row">
+        <h2 class="section-title">Choisis un niveau de difficulté</h2>
+        <span class="section-subtitle">Chaque niveau débloque de nouveaux paliers de sagesse</span>
+      </div>
+      <div class="levels-grid" id="levelsGrid">
+        <!-- Généré dynamiquement par game.js -->
+      </div>
+    </div>
+
+    <!-- Statistiques en direct -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <span class="stat-icon">⭐</span>
+        <div>
+          <div class="stat-val" id="statTotalScore">0</div>
+          <div class="stat-label">Score cumulé</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <span class="stat-icon">🔓</span>
+        <div>
+          <div class="stat-val" id="statUnlocked">1 / 3</div>
+          <div class="stat-label">Niveaux débloqués</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <span class="stat-icon">🎯</span>
+        <div>
+          <div class="stat-val" id="statAccuracy">—</div>
+          <div class="stat-label">Taux de réussite</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <span class="stat-icon">🔥</span>
+        <div>
+          <div class="stat-val" id="statStreak">0</div>
+          <div class="stat-label">Série en cours</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ÉCRAN 2 : CHOIX DU MODE DE JEU -->
+  <section class="screen" id="screenMode">
+    <button class="btn-back" id="btnBackToHome">← Retour aux niveaux</button>
+    
+    <div class="mode-header">
+      <div class="mode-badge" id="modeLevelBadge">Niveau 1</div>
+      <h2 class="mode-title">Comment souhaitez-vous jouer ?</h2>
+      <p class="mode-sub">Choisissez votre façon d'aborder les devinettes</p>
+    </div>
+
+    <div class="mode-cards">
+      <!-- Mode Quiz -->
+      <div class="mode-card" data-mode="quiz" id="modeQuiz">
+        <div class="mode-card-icon">📋</div>
+        <div class="mode-card-title">Mode Quiz (QCM)</div>
+        <div class="mode-card-desc">
+          Une proposition parmi 4 choix multiples. Idéal pour s'initier et découvrir les réponses traditionnelles sans stress !
+        </div>
+        <div class="mode-card-tag">Format Recommandé</div>
+      </div>
+
+      <!-- Mode Saisie Libre (Fill-in-the-blank) -->
+      <div class="mode-card" data-mode="fill" id="modeFill">
+        <div class="mode-card-icon">✏️</div>
+        <div class="mode-card-title">Saisie libre & Darija</div>
+        <div class="mode-card-desc">
+          Tapez votre réponse en Darija (latin avec 3, 7, 9 ou arabe) ou en français. Notre moteur hybride évalue votre réponse !
+        </div>
+        <div class="mode-card-tag bonus-tag">+Bonus de maîtrise</div>
+      </div>
+
+      <!-- Mode Mixte -->
+      <div class="mode-card" data-mode="mixed" id="modeMixed">
+        <div class="mode-card-icon">🎲</div>
+        <div class="mode-card-title">Mode Aléatoire Mixte</div>
+        <div class="mode-card-desc">
+          Alterne automatiquement entre QCM et saisie directe au fil des questions. Pour les véritables passionnés !
+        </div>
+        <div class="mode-card-tag challenge-tag">⚡ Défi complet</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ÉCRAN 3 : ARÈNE DE JEU DE LA DEVINETTE -->
+  <section class="screen" id="screenGame">
+    <!-- Barre supérieure de progression -->
+    <div class="game-topbar">
+      <button class="btn-back small" id="btnQuitGame">✕ Abandonner</button>
+      
+      <div class="game-progress-wrap">
+        <div class="game-progress-bar" id="gameProgressBar"></div>
+      </div>
+
+      <div class="game-info-pills">
+        <div class="info-pill timer-pill">
+          <span class="pill-icon">⏱</span>
+          <span id="timerDisplay">30s</span>
+        </div>
+        <div class="info-pill score-pill">
+          <span class="pill-icon">⭐</span>
+          <span id="gameScoreDisplay">0</span>
+        </div>
+        <div class="info-pill streak-pill">
+          <span class="pill-icon">🔥</span>
+          <span id="streakDisplay">0</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Carte de la devinette -->
+    <div class="question-card" id="questionCard">
+      <div class="q-header">
+        <span class="q-num" id="questionNum">Devinette 1 / 5</span>
+        <span class="q-type-badge" id="qTypeBadge">Quiz</span>
+        <span class="q-category" id="qCategory">Objets du quotidien · Fès</span>
+      </div>
+
+      <!-- Énoncés bilingues Darija + Arabe + Français -->
+      <div class="devinette-statement-box">
+        <div class="hajitek-label">7ajitek Ma Jitek...</div>
+        <div class="q-darija" id="qDarija">3ndou snan w ma kay3ddch, chkoun houwa ?</div>
+        <div class="q-arabic" id="qArabic" dir="rtl">عندو سنان وما كيعضش، شكون هو؟</div>
+        <div class="q-french" id="qFrench">« Il a des dents mais ne mord jamais. Qui est-ce ? »</div>
+      </div>
+
+      <!-- Indice culturel dévoilé -->
+      <div class="hint-display-box" id="hintDisplayBox"></div>
+
+      <!-- FORMAT 1 : OPTIONS DE QUIZ (QCM) -->
+      <div class="quiz-options" id="quizOptions">
+        <button class="option-btn" data-idx="0"></button>
+        <button class="option-btn" data-idx="1"></button>
+        <button class="option-btn" data-idx="2"></button>
+        <button class="option-btn" data-idx="3"></button>
+      </div>
+
+      <!-- FORMAT 2 : SAISIE LIBRE / TEXTE À TROUS -->
+      <div class="fill-mode" id="fillMode" style="display:none">
+        <div class="fill-instruction">
+          Tapez votre réponse (en Darija latine, arabe ou français) :
+        </div>
+        <div class="fill-input-wrap">
+          <input type="text" id="fillInput" class="fill-input" placeholder="Ex: lmchet, peigne, المشط..." autocomplete="off" />
+          <button class="btn btn-submit" id="btnSubmitFill">Valider</button>
+        </div>
+        <!-- Clavier rapide Arabizi pour faciliter la frappe sur ordinateur -->
+        <div class="arabizi-shortcuts">
+          <span class="arabizi-title">Touches rapides Darija :</span>
+          <button class="arabizi-key" data-char="3" title="Lettre 'Ayn (ع)">3 (ع)</button>
+          <button class="arabizi-key" data-char="7" title="Lettre Haa (ح)">7 (ح)</button>
+          <button class="arabizi-key" data-char="9" title="Lettre Qaf (ق)">9 (ق)</button>
+          <button class="arabizi-key" data-char="5" title="Lettre Kha (خ)">5 (خ)</button>
+        </div>
+      </div>
+
+      <!-- Action Indice -->
+      <div class="lifeline-row">
+        <button class="btn-hint" id="btnUseHint">
+          💡 Demander un indice <span class="hint-cost">(-2 pts)</span>
+        </button>
+      </div>
+
+      <!-- Overlay de rétroaction (Verdict + Explication culturelle FR-7) -->
+      <div class="feedback-overlay" id="feedbackOverlay">
+        <div class="feedback-icon" id="feedbackIcon">✨</div>
+        <div class="feedback-text" id="feedbackText">Bravo !</div>
+        <div class="feedback-points" id="feedbackPoints">+10 points</div>
+        <div class="feedback-solution" id="feedbackSolution">Solution : Lmchet</div>
+        <div class="feedback-explanation" id="feedbackExplanation">Explication culturelle...</div>
+        <button class="btn btn-next" id="btnNext">Devinette suivante →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ÉCRAN 4 : RÉCAPITULATIF ET RÉSULTAT DU NIVEAU -->
+  <section class="screen" id="screenResult">
+    <div class="result-container">
+      <div class="result-trophy" id="resultTrophy">🏆</div>
+      <h2 class="result-title">Niveau Terminé !</h2>
+      <div class="result-grade" id="resultGrade">Hakim du Patrimoine</div>
+
+      <div class="result-stats">
+        <div class="res-stat">
+          <div class="res-val" id="resScore">0</div>
+          <div class="res-label">Points remportés</div>
+        </div>
+        <div class="res-stat">
+          <div class="res-val" id="resCorrect">0 / 0</div>
+          <div class="res-label">Bonnes réponses</div>
+        </div>
+        <div class="res-stat">
+          <div class="res-val" id="resTime">0s</div>
+          <div class="res-label">Temps moyen</div>
+        </div>
+        <div class="res-stat">
+          <div class="res-val" id="resBestStreak">0</div>
+          <div class="res-label">Meilleure série</div>
+        </div>
+      </div>
+
+      <!-- Bannière de déblocage de niveau -->
+      <div class="unlock-banner" id="unlockBanner" style="display:none">
+        <span class="unlock-icon">🔓</span>
+        <span class="unlock-text" id="unlockText">Nouveau niveau débloqué !</span>
+      </div>
+
+      <!-- Barre d'expérience globale -->
+      <div class="xp-section">
+        <div class="xp-label">Progression globale vers le palier suivant</div>
+        <div class="xp-bar-bg">
+          <div class="xp-bar-fill" id="xpBarFill"></div>
+        </div>
+        <div class="xp-bar-label" id="xpBarLabel">0 / 140 pts</div>
+      </div>
+
+      <div class="result-actions">
+        <button class="btn btn-secondary" id="btnReplay">↩ Rejouer ce niveau</button>
+        <button class="btn btn-primary" id="btnReturnHome">🏠 Menu des niveaux</button>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ===========================
+     MODAL HISTORIQUE (FR-8)
+     =========================== -->
+<div class="modal" id="historyModal">
+  <div class="modal-card">
+    <div class="modal-header">
+      <h3>📜 Historique des devinettes jouées</h3>
+      <button class="modal-close" id="btnCloseHistory">✕</button>
+    </div>
+    <div class="history-list" id="historyList">
+      <!-- Rempli en JS -->
+    </div>
+  </div>
+</div>
+
+<!-- Canevas pour confettis -->
+<canvas id="confettiCanvas"></canvas>
+
+<!-- Message Toast -->
+<div class="toast" id="toast"></div>
+
+<!-- Scripts -->
+<script src="data.js"></script>
+<script src="game.js"></script>
+</body>
+</html>
