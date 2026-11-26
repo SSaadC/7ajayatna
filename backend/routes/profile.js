@@ -1,24 +1,16 @@
 const express = require('express');
-const jwt = require('jsonwebtoken');
+const authMiddleware = require('../middleware/authMiddleware');
 const db = require('../config/db');
 
 const router = express.Router();
 
 router.use((req, res, next) => {
     res.set('Cache-Control', 'no-store');
-    const token = /^Bearer\s+(\S+)$/i.exec(req.get('Authorization') || '')?.[1];
-    if (!token) {
-        return res.status(401).json({ message: 'Connectez-vous pour consulter votre profil.' });
-    }
-
-    try {
-        // Same signed user ID as the team's login token.
-        const { id } = jwt.verify(token, process.env.JWT_SECRET, { algorithms: ['HS256'] });
-        if (!Number.isSafeInteger(id) || id < 1) {
-            return res.status(403).json({ message: 'Session invalide ou expirée.' });
-        }
-        res.locals.profileUserId = id;
-    } catch {
+    next();
+});
+router.use(authMiddleware);
+router.use((req, res, next) => {
+    if (!Number.isSafeInteger(req.user?.id) || req.user.id < 1) {
         return res.status(403).json({ message: 'Session invalide ou expirée.' });
     }
 
@@ -27,9 +19,9 @@ router.use((req, res, next) => {
 
 router.get('/', async (req, res) => {
     try {
-        const userId = res.locals.profileUserId;
+        const userId = req.user.id;
         const [[profile]] = await db.execute(
-            'SELECT username, email, total_points, games_played, created_at FROM users WHERE id = ?',
+            'SELECT id, username, email, total_points, games_played, created_at FROM users WHERE id = ?',
             [userId]
         );
         if (!profile) {
@@ -55,7 +47,7 @@ router.patch('/', express.json({ limit: '2kb' }), async (req, res) => {
     }
 
     try {
-        const [result] = await db.execute('UPDATE users SET username = ? WHERE id = ?', [username, res.locals.profileUserId]);
+        const [result] = await db.execute('UPDATE users SET username = ? WHERE id = ?', [username, req.user.id]);
         if (!result.affectedRows) {
             return res.status(404).json({ message: 'Profil introuvable.' });
         }

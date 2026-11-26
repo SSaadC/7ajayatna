@@ -1,7 +1,8 @@
 (() => {
   const {
-    gameStorageKey, tokenStorageKey, readGameState, readToken, count, formatDate, numberFormat, requestProfile
+    gameStorageKey, tokenStorageKey, readGameState, readToken, requireSession, count, formatDate, numberFormat, requestProfile
   } = ProfileData;
+  if (!requireSession()) return;
   const element = name => document.getElementById(`history-${name}`);
   const setText = (name, value) => { element(name).textContent = value; };
   const sourceButtons = [...element('sources').querySelectorAll('button')];
@@ -10,12 +11,7 @@
   let filter = 'all';
   let account = null;
   let accountUnavailable = false;
-  let loadedToken = null;
   let requestId = 0;
-
-  function currentToken() {
-    return location.protocol === 'file:' ? null : readToken();
-  }
 
   function records(value) {
     return Array.isArray(value) ? value.filter(entry => entry && typeof entry === 'object') : [];
@@ -117,8 +113,7 @@
 
   async function loadAccount() {
     const id = ++requestId;
-    const token = currentToken();
-    loadedToken = token;
+    const token = requireSession();
     account = null;
     accountUnavailable = false;
     source = 'device';
@@ -127,11 +122,12 @@
 
     try {
       const result = await requestProfile(token);
-      if (id !== requestId) return;
+      if (id !== requestId || token !== readToken()) return;
       if (typeof result.profile?.username !== 'string') throw new Error('Réponse inattendue.');
       account = result;
-    } catch {
-      if (id !== requestId) return;
+      source = 'account';
+    } catch (error) {
+      if (id !== requestId || token !== readToken() || error.name === 'ProfileSessionError') return;
       accountUnavailable = true;
     }
     render();
@@ -160,9 +156,7 @@
     else if (event.key === gameStorageKey) render();
   });
   window.addEventListener('pageshow', event => {
-    if (!event.persisted) return;
-    if (currentToken() !== loadedToken) loadAccount();
-    else render();
+    if (event.persisted) loadAccount();
   });
 
   loadAccount();

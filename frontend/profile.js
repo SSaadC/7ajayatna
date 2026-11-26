@@ -1,5 +1,6 @@
 (() => {
-  const { gameStorageKey, readGameState, readToken, count, formatDate, numberFormat, requestProfile } = ProfileData;
+  const { gameStorageKey, tokenStorageKey, readGameState, readToken, requireSession, count, formatDate, numberFormat, requestProfile } = ProfileData;
+  if (!requireSession()) return;
   const imageStoragePrefix = '7ajayatna_profile_images:';
   const detailsStoragePrefix = '7ajayatna_profile_details:';
   const imageTypes = new Set(['image/jpeg', 'image/png', 'image/webp']);
@@ -43,6 +44,7 @@
   let account = null;
   let accountToken = null;
   let accountWarning = '';
+  let requestId = 0;
 
   function profileStorageKey(prefix) {
     const email = account?.profile.email;
@@ -254,24 +256,32 @@
   }
 
   async function load() {
-    const token = location.protocol === 'file:' ? null : readToken();
-    if (!token) {
-      render();
-      return;
+    const id = ++requestId;
+    const token = requireSession();
+    account = null;
+    accountToken = null;
+    accountWarning = '';
+    for (const editor of [dialog, detailsDialog, imagesDialog]) {
+      if (editor.open) editor.close();
     }
-
     for (const button of profileActions) button.disabled = true;
+    render();
+    if (!token) return;
     setText('account-note', 'Chargement de votre compte…');
     try {
       const current = await requestProfile(token);
+      if (id !== requestId || token !== readToken()) return;
       if (typeof current.profile?.username !== 'string') throw new Error('Réponse inattendue.');
       account = current;
       accountToken = token;
-    } catch {
+    } catch (error) {
+      if (id !== requestId || token !== readToken() || error.name === 'ProfileSessionError') return;
       accountWarning = 'Compte indisponible. La progression affichée vient de cet appareil.';
     } finally {
-      for (const button of profileActions) button.disabled = false;
-      render();
+      if (id === requestId) {
+        for (const button of profileActions) button.disabled = !account;
+        render();
+      }
     }
   }
 
@@ -299,7 +309,7 @@
 
   element('form').addEventListener('submit', async event => {
     event.preventDefault();
-    if (save.disabled) return;
+    if (save.disabled || !account) return;
     const username = input.value.trim();
     if (!username) {
       showFormError('Saisissez un pseudonyme.');
@@ -310,14 +320,10 @@
     save.disabled = cancel.disabled = input.disabled = true;
     let saved = false;
     try {
-      if (account) {
-        if (readToken() !== accountToken) throw new Error('La session a changé. Rechargez la page.');
-        const updated = await requestProfile(accountToken, username);
-        account.profile.username = updated.username;
-      } else {
-        const game = readGameState();
-        localStorage.setItem(gameStorageKey, JSON.stringify({ ...game, playerName: username }));
-      }
+      const editingAccount = account;
+      const updated = await requestProfile(accountToken, username);
+      if (account !== editingAccount) return;
+      account.profile.username = updated.username;
       saved = true;
     } catch (error) {
       showFormError(account && !(error instanceof TypeError || error instanceof SyntaxError) && error.name !== 'TimeoutError'
@@ -428,12 +434,16 @@
   });
 
   window.addEventListener('storage', event => {
-    if (event.key === null || (event.key === gameStorageKey && !account)) render();
+    if (event.key === null || event.key === tokenStorageKey) {
+      load();
+      return;
+    }
+    if (event.key === gameStorageKey && !account) render();
     if (event.key === profileStorageKey(imageStoragePrefix)) renderImages();
     if (event.key === profileStorageKey(detailsStoragePrefix)) renderDetails();
   });
   window.addEventListener('pageshow', event => {
-    if (event.persisted) render();
+    if (event.persisted) load();
   });
 
   load();
