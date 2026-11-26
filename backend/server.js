@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 require('dotenv').config();
 
 // Importation de la connexion MySQL pour tester au démarrage
@@ -7,16 +8,12 @@ const db = require('./config/db');
 
 const app = express();
 
-// Middlewares globaux
-app.use(cors()); // Autorise le frontend (HTML/JS) à appeler ce serveur
-const profileRoutes = require('./routes/profile');
-app.use('/api/profile', profileRoutes);
-app.use(express.json()); // Permet au serveur de lire les données JSON envoyées dans req.body
-
-const path = require('path');
+// 1. Middlewares globaux (TOUJOURS avant les routes)
+app.use(cors());
+app.use(express.json());
 app.use(express.static(path.join(__dirname, '../frontend')));
 
-// Route de test rapide
+// 2. Route de test rapide
 app.get('/api/health', async (req, res) => {
     try {
         await db.query('SELECT 1');
@@ -26,15 +23,18 @@ app.get('/api/health', async (req, res) => {
     }
 });
 
-// Routes de l'application
+// 3. Routes de l'application
 const authRoutes = require('./routes/auth');
-app.use('/api/auth', authRoutes);
-app.use('/api/leaderboard', require('./routes/leaderboard')); // [Imad] Classement général
-
 const gameRoutes = require('./routes/game');
-app.use('/api/game', gameRoutes);
+const leaderboardRoutes = require('./routes/leaderboard');
+const profileRoutes = require('./routes/profile');
 
-// Démarrage du serveur
+app.use('/api/auth', authRoutes);
+app.use('/api/game', gameRoutes);
+app.use('/api/leaderboard', leaderboardRoutes);
+app.use('/api/profile', profileRoutes);
+
+// 4. Démarrage du serveur
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Serveur 7ajayatna démarré sur http://localhost:${PORT}`);
