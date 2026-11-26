@@ -336,7 +336,22 @@ const App = {
   },
 
   init() {
+    // Vérifier l'authentification JWT avant d'autoriser l'accès au jeu
+    const token = localStorage.getItem('token');
+    const userStr = localStorage.getItem('user');
+    if (!token || !userStr) {
+      window.location.href = 'login.html';
+      return;
+    }
+
+    const currentUser = JSON.parse(userStr);
+    this.state.playerName = currentUser.username;
+    this.state.totalScore = currentUser.total_points || 0;
+
     this.loadState();
+    // Forcer le vrai nom d'utilisateur issu de MySQL
+    this.state.playerName = currentUser.username;
+
     SoundEffects.init();
     ConfettiEngine.init();
     this.renderLevelsGrid();
@@ -383,6 +398,12 @@ const App = {
         }
       });
     }
+    // Déconnexion
+    document.getElementById('btnLogout')?.addEventListener('click', () => {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      window.location.href = 'login.html';
+    });
 
     // Boutons de retour
     document.getElementById('btnBackToHome')?.addEventListener('click', () => this.switchScreen('screenHome'));
@@ -832,6 +853,32 @@ const App = {
     }
 
     this.saveState();
+    // Envoyer le score de la partie au backend Express + MySQL
+    const token = localStorage.getItem('token');
+    if (token) {
+      fetch('http://localhost:3000/api/game/finish', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token
+        },
+        body: JSON.stringify({
+          score_earned: this.session.levelScore,
+          riddles_answered: this.session.questions.length
+        })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.total_points !== undefined) {
+          // Synchroniser le score officiel de MySQL dans le localStorage
+          const user = JSON.parse(localStorage.getItem('user'));
+          user.total_points = data.total_points;
+          user.games_played = data.games_played;
+          localStorage.setItem('user', JSON.stringify(user));
+        }
+      })
+      .catch(err => console.error('Erreur synchronisation MySQL:', err));
+    }
     SoundEffects.playVictory();
     ConfettiEngine.fire(120);
 

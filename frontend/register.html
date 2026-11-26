@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>7ajayatna - Inscription</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="auth-container">
+        <h1>7ajayatna 🎲</h1>
+        <h2>Créer un compte</h2>
+
+        <!-- Zone d'affichage des messages (erreur ou succès) -->
+        <div id="message-box" class="message-box"></div>
+
+        <form id="register-form">
+            <div class="form-group">
+                <label for="username">Nom d'utilisateur</label>
+                <input type="text" id="username" required placeholder="Ex: saad_maroc">
+            </div>
+
+            <div class="form-group">
+                <label for="email">Adresse Email</label>
+                <input type="email" id="email" required placeholder="Ex: saad@inpt.ac.ma">
+            </div>
+
+            <div class="form-group">
+                <label for="password">Mot de passe</label>
+                <input type="password" id="password" required minlength="6" placeholder="6 caractères minimum">
+            </div>
+
+            <button type="submit" class="btn-primary">S'inscrire</button>
+        </form>
+
+        <p class="auth-link">
+            Déjà un compte ? <a href="login.html">Se connecter</a>
+        </p>
+    </div>
+
+    <script src="js/auth.js"></script>
+</body>
+</html>

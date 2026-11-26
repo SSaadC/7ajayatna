@@ -13,6 +13,9 @@ const profileRoutes = require('./routes/profile');
 app.use('/api/profile', profileRoutes);
 app.use(express.json()); // Permet au serveur de lire les données JSON envoyées dans req.body
 
+const path = require('path');
+app.use(express.static(path.join(__dirname, '../frontend')));
+
 // Route de test rapide
 app.get('/api/health', async (req, res) => {
     try {
@@ -22,6 +25,13 @@ app.get('/api/health', async (req, res) => {
         res.status(500).json({ status: 'ERROR', message: error.message });
     }
 });
+
+// Routes de l'application
+const authRoutes = require('./routes/auth');
+app.use('/api/auth', authRoutes);
+
+const gameRoutes = require('./routes/game');
+app.use('/api/game', gameRoutes);
 
 // Démarrage du serveur
 const PORT = process.env.PORT || 3000;
