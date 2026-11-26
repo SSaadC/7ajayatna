@@ -21,7 +21,9 @@ app.get('/api/health', async (req, res) => {
     }
 });
 
-// Routes de l'API
+// Routes de l'application
+const authRoutes = require('./routes/auth');
+app.use('/api/auth', authRoutes);
 app.use('/api/leaderboard', require('./routes/leaderboard')); // [Imad] Classement général
 
 // Démarrage du serveur

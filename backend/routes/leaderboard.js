@@ -1,6 +1,6 @@
 const express = require('express');
-const jwt = require('jsonwebtoken');
 const db = require('../config/db');
+const authMiddleware = require('../middleware/authMiddleware');
 
 const router = express.Router();
 
@@ -49,26 +49,11 @@ router.get('/', async (req, res) => {
     }
 });
 
-// Lit l'identifiant du joueur dans l'en-tête "Authorization: Bearer <token>".
-// TODO après le merge : remplacer par le middleware de Saad (middleware/authMiddleware.js).
-function getUserIdFromToken(req) {
-    const header = req.headers.authorization || '';
-    if (!header.startsWith('Bearer ')) return null;
-    try {
-        const payload = jwt.verify(header.slice(7), process.env.JWT_SECRET);
-        return payload.id ?? payload.userId ?? null; // nom du champ à confirmer avec Saad
-    } catch {
-        return null;
-    }
-}
-
 // GET /api/leaderboard/me   (connecté)
 // Rang du joueur connecté, même s'il n'est pas dans le top affiché.
-router.get('/me', async (req, res) => {
-    const userId = getUserIdFromToken(req);
-    if (!userId) {
-        return res.status(401).json({ message: 'Token manquant ou invalide.' });
-    }
+// authMiddleware (Saad) vérifie le token et remplit req.user = { id, username }.
+router.get('/me', authMiddleware, async (req, res) => {
+    const userId = req.user.id;
 
     try {
         const [users] = await db.query(
