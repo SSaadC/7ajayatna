@@ -75,7 +75,7 @@ if (loginForm) {
 
             showMessage('Connexion réussie ! Redirection...', 'success');
             setTimeout(() => {
-                window.location.href = 'game.html';
+                window.location.href = 'index.html';
             }, 1000);
 
         } catch (error) {
