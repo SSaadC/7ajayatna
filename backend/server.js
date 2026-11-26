@@ -27,6 +27,7 @@ app.get('/api/health', async (req, res) => {
 // Routes de l'application
 const authRoutes = require('./routes/auth');
 app.use('/api/auth', authRoutes);
+app.use('/api/leaderboard', require('./routes/leaderboard')); // [Imad] Classement général
 
 const gameRoutes = require('./routes/game');
 app.use('/api/game', gameRoutes);

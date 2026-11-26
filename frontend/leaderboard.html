@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>7ajayatna (حجاياتنا) – Classement</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Nunito:wght@400;600;700;800;900&family=Orbitron:wght@700;900&display=swap" rel="stylesheet" />
+</head>
+<body class="lb-page">
+
+<div class="bg-pattern"></div>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a href="index.html" class="logo" style="text-decoration:none">
+      <span class="logo-symbol">۞</span>
+      <div class="logo-titles">
+        <span class="logo-main">7ajayatna</span>
+        <span class="logo-sub">حجاياتنا · Devinettes du Maroc</span>
+      </div>
+    </a>
+
+    <nav class="header-nav">
+      <a href="index.html" class="nav-btn">🏠 Menu</a>
+      <a href="game.html" class="nav-btn">🎮 Jouer</a>
+      <a href="leaderboard.html" class="nav-btn active">🏆 Classement</a>
+    </nav>
+
+    <div class="header-score-pill" id="lb-score-pill" hidden>
+      <span class="pill-label">Score</span>
+      <span class="pill-value" id="lb-header-score">0</span>
+      <span class="pill-star">★</span>
+    </div>
+  </div>
+</header>
+
+<main id="app">
+  <div class="home-hero">
+    <h1 class="hero-title">الترتيب</h1>
+    <p class="hero-sub">Classement général des joueurs</p>
+  </div>
+
+  <section class="card lb-container">
+    <div class="lb-top">
+      <h2 class="section-title">🏆 Top joueurs</h2>
+      <select id="lb-limit" class="lb-select" aria-label="Nombre de joueurs affichés">
+        <option value="10" selected>Top 10</option>
+        <option value="25">Top 25</option>
+        <option value="50">Top 50</option>
+      </select>
+    </div>
+
+    <p id="lb-my-rank" class="lb-my-rank" hidden></p>
+
+    <table class="lb-table">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Joueur</th>
+          <th scope="col">Points</th>
+          <th scope="col">Parties</th>
+        </tr>
+      </thead>
+      <tbody id="lb-body">
+        <tr><td colspan="4" class="lb-status">Chargement...</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <p class="lb-back-row"><a href="index.html" class="btn-back">← Retour au menu</a></p>
+</main>
+
+<script src="js/leaderboard.js"></script>
+</body>
+</html>

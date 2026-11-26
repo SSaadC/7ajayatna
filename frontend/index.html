@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>7ajayatna (حجاياتنا) – Menu principal</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Nunito:wght@400;600;700;800;900&family=Orbitron:wght@700;900&display=swap" rel="stylesheet" />
+</head>
+<body class="lb-page">
+
+<div class="bg-pattern"></div>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a href="index.html" class="logo" style="text-decoration:none">
+      <span class="logo-symbol">۞</span>
+      <div class="logo-titles">
+        <span class="logo-main">7ajayatna</span>
+        <span class="logo-sub">حجاياتنا · Devinettes du Maroc</span>
+      </div>
+    </a>
+
+    <nav class="header-nav">
+      <a href="index.html" class="nav-btn active">🏠 Menu</a>
+      <a href="game.html" class="nav-btn">🎮 Jouer</a>
+      <a href="leaderboard.html" class="nav-btn">🏆 Classement</a>
+    </nav>
+
+    <div class="header-score-pill" id="lb-score-pill" hidden>
+      <span class="pill-label">Score</span>
+      <span class="pill-value" id="lb-header-score">0</span>
+      <span class="pill-star">★</span>
+    </div>
+  </div>
+</header>
+
+<main id="app">
+  <div class="home-hero">
+    <div class="hero-badge">🇲🇦 Devinettes marocaines en Darija</div>
+    <h1 class="hero-title">حجاياتنا</h1>
+    <p class="hero-sub">7ajitek Ma Jitek... Joue, gagne des points et grimpe dans le classement !</p>
+  </div>
+
+  <section class="card lb-container lb-narrow">
+    <p id="menu-welcome" class="menu-welcome">Mar7ba ! Connecte-toi pour jouer.</p>
+
+    <nav class="menu-buttons">
+      <a href="game.html" class="btn btn-primary" id="menu-play">🎮 Jouer</a>
+      <a href="leaderboard.html" class="btn btn-secondary">🏆 Classement</a>
+      <a href="profile.html" class="btn btn-secondary" id="menu-profile" hidden>👤 Mon profil</a>
+      <a href="login.html" class="btn btn-secondary" id="menu-login">🔑 Connexion</a>
+      <a href="register.html" class="btn btn-secondary" id="menu-register">✍️ Inscription</a>
+      <button type="button" class="btn btn-secondary" id="menu-logout" hidden>🚪 Déconnexion</button>
+    </nav>
+  </section>
+</main>
+
+<script src="js/menu.js"></script>
+</body>
+</html>
