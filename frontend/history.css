@@ -1,0 +1,118 @@
+.history-heading, .history-card-heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  justify-content: space-between;
+  gap: .85rem 1.5rem;
+}
+
+.history-context { margin-block-start: .55rem; color: var(--profile-muted); }
+
+.history-summary {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(.65rem, 2vw, 1.2rem);
+  margin-block-end: clamp(1rem, 3vw, 1.65rem);
+}
+
+.history-summary:has(> [hidden]) { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.history-summary > div {
+  position: relative;
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: start;
+  gap: .35rem;
+  padding: clamp(.8rem, 2.6vw, 1.55rem);
+}
+
+.history-summary dt { color: var(--profile-muted); font-size: .9rem; }
+.history-summary dd { font: 600 clamp(1.65rem, 4.6vw, 2.7rem)/1.05 var(--profile-display); overflow-wrap: anywhere; }
+.history-summary > .history-summary-primary { padding-inline-end: clamp(2rem, 5vw, 3.25rem); background: var(--profile-green-dark); color: var(--profile-paper); }
+.history-summary-primary dt { color: #e6eee7; }
+.history-summary-star { position: absolute; inset-block-start: .9rem; inset-inline-end: .9rem; inline-size: .95rem; color: var(--profile-gold); }
+
+.history-card { padding: clamp(1rem, 3vw, 1.75rem); }
+.history-card-heading { align-items: center; padding-block-end: .7rem; }
+.history-card-heading h2, .history-empty h3 { font: 600 clamp(1.5rem, 3.3vw, 2rem)/1.15 var(--profile-display); letter-spacing: -.025em; }
+.history-result-count { margin-block-start: .3rem; color: var(--profile-muted); font-size: .875rem; }
+
+.history-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .2rem;
+  padding: .2rem;
+  border: 1px solid var(--profile-border);
+  border-radius: .75rem;
+  background: var(--profile-background);
+}
+
+.history-option {
+  min-block-size: 2.75rem;
+  padding: .4rem .65rem;
+  border: 1px solid transparent;
+  border-radius: .5rem;
+  background: transparent;
+  color: var(--profile-muted);
+  font: 700 .875rem/1.2 "DM Sans", system-ui, sans-serif;
+  cursor: pointer;
+}
+
+.history-option:hover { color: var(--profile-green-dark); }
+.history-option[aria-pressed="true"] { border-color: var(--profile-border); background: var(--profile-paper); color: var(--profile-green-dark); }
+
+.history-entries { padding: 0; list-style: none; }
+.history-entry {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: start;
+  gap: clamp(.5rem, 2.5vw, 1rem);
+  padding-block: .95rem;
+  border-block-start: 1px solid var(--profile-border);
+}
+
+.history-entry:last-child { padding-block-end: 0; }
+.history-entry-mark {
+  display: grid;
+  place-items: center;
+  inline-size: 2rem;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--profile-wash);
+  color: var(--profile-green-dark);
+  font-weight: 700;
+}
+
+.history-entry-mark-missed { background: #faeee7; color: var(--profile-clay); }
+.history-entry-title { color: var(--profile-ink); font-weight: 700; overflow-wrap: anywhere; }
+.history-entry-solution { margin-block-start: .2rem; color: var(--profile-ink); font-size: .9rem; overflow-wrap: anywhere; }
+.history-entry-meta { display: flex; flex-wrap: wrap; gap: .15rem .6rem; margin-block-start: .3rem; color: var(--profile-muted); font-size: .83rem; overflow-wrap: anywhere; }
+.history-entry-points { color: var(--profile-green-dark); font-size: .875rem; font-weight: 700; text-align: end; overflow-wrap: anywhere; }
+
+.history-empty {
+  display: grid;
+  justify-items: center;
+  gap: .65rem;
+  padding: clamp(1.75rem, 5vw, 3rem) 1rem;
+  border: 1px dashed #d6ccbb;
+  border-radius: .75rem;
+  background: #faf6ee;
+  text-align: center;
+}
+
+.history-empty-mark {
+  display: grid;
+  place-items: center;
+  inline-size: 3rem;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--profile-wash);
+  color: var(--profile-green);
+}
+
+.history-empty p { max-inline-size: 48ch; color: var(--profile-muted); }
+.history-empty .profile-button { margin-block-start: .35rem; }
+
+@media (max-width: 36rem) {
+  .history-summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .history-summary:not(:has(> [hidden])) .history-summary-primary { grid-column: 1 / -1; }
+}

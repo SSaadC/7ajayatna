@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mon profil · 7ajayatna</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&amp;family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&amp;family=Amiri:wght@400;700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="profile.css">
+  <script defer src="data.js"></script>
+  <script defer src="profile-data.js"></script>
+  <script defer src="profile.js"></script>
+  <script defer src="profile-sound.js"></script>
+</head>
+<body class="profile-page">
+  <a class="profile-skip" href="#profile-main">Aller au contenu</a>
+  <header class="profile-header">
+    <div class="profile-shell profile-header-inner">
+      <a class="profile-brand" href="game.html">
+        <span class="profile-brand-mark" aria-hidden="true"><span class="profile-star"></span></span>
+        <span>7ajayatna<span class="profile-brand-caption"><span class="profile-brand-arabic" lang="ar" dir="rtl">حجاياتنا</span><span>Devinettes du Maroc</span></span></span>
+      </a>
+      <nav class="profile-nav" aria-label="Navigation principale">
+        <a class="profile-nav-link" href="game.html" aria-label="Jouer" title="Jouer">
+          <svg class="profile-nav-symbol" viewBox="0 0 24 24" aria-hidden="true"><path d="m8 5 12 7-12 7z"/></svg>
+          <span class="profile-nav-label">Jouer</span>
+        </a>
+        <a class="profile-nav-link" href="history.html" aria-label="Historique" title="Historique">
+          <svg class="profile-nav-symbol" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 7.5V12l3 2"/></svg>
+          <span class="profile-nav-label">Historique</span>
+        </a>
+        <button class="profile-nav-link profile-nav-icon" id="profile-sound" type="button" aria-label="Couper le son du jeu"
+          aria-pressed="false" title="Couper le son du jeu">
+          <svg class="profile-nav-symbol" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M3 9v6h4l5 4V5L7 9z"/>
+            <path class="profile-sound-waves" d="M16 9a4 4 0 0 1 0 6m3-9a8 8 0 0 1 0 12"/>
+            <path class="profile-sound-cross" d="m16 9 6 6m0-6-6 6"/>
+          </svg>
+        </button>
+      </nav>
+      <div class="profile-header-tools">
+        <div class="profile-header-score">
+          <span>Score</span><strong id="profile-header-score">0</strong><span class="profile-star profile-score-star" aria-hidden="true"></span>
+        </div>
+        <a class="profile-nav-link profile-nav-icon" href="profile.html" aria-current="page" aria-label="Mon profil" title="Mon profil">
+          <svg class="profile-nav-symbol" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.2"/><path d="M5 20v-1a5 5 0 0 1 5-5h4a5 5 0 0 1 5 5v1"/></svg>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="profile-shell profile-main" id="profile-main">
+    <div class="profile-heading">
+      <h1>Mon profil</h1>
+    </div>
+
+    <div class="profile-grid">
+      <section class="profile-card profile-identity" aria-labelledby="profile-name">
+        <div class="profile-cover">
+          <img id="profile-cover-image" src="assets/profile/riad-cover.jpg" alt="" width="1440" height="480" fetchpriority="high">
+          <button class="profile-image-trigger profile-cover-trigger" id="profile-edit-cover" type="button"
+            aria-label="Modifier la couverture" aria-haspopup="dialog" aria-controls="profile-images-dialog" title="Modifier la couverture">
+            <span class="profile-image-icon" aria-hidden="true"></span>
+          </button>
+        </div>
+        <div class="profile-identity-content">
+          <div class="profile-avatar-frame">
+            <img class="profile-avatar" id="profile-avatar-image" src="assets/profile/zellige-avatar.jpg" alt="" width="88" height="88">
+            <button class="profile-image-trigger profile-avatar-trigger" id="profile-edit-avatar" type="button"
+              aria-label="Modifier la photo de profil" aria-haspopup="dialog" aria-controls="profile-images-dialog" title="Modifier la photo de profil">
+              <span class="profile-image-icon" aria-hidden="true"></span>
+            </button>
+          </div>
+          <p class="profile-account-type" id="profile-account-type">Profil local</p>
+          <h2 id="profile-name" dir="auto">Joueur</h2>
+          <p class="profile-account-note" id="profile-account-note" role="status">Votre progression est enregistrée sur cet appareil.</p>
+          <div class="profile-actions">
+            <a class="profile-button profile-button-primary" href="game.html">Jouer <span aria-hidden="true">↗</span></a>
+            <button class="profile-button" id="profile-edit" type="button">Modifier le profil</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="profile-card profile-progress-card" aria-labelledby="profile-progress-title">
+        <div class="profile-section-heading">
+          <h2 id="profile-progress-title">Ma progression</h2>
+          <span class="profile-star profile-section-star" aria-hidden="true"></span>
+        </div>
+        <dl class="profile-stats">
+          <div><dt>Points</dt><dd id="profile-points">0</dd></div>
+          <div><dt>Niveaux ouverts</dt><dd id="profile-level-count">1 / 3</dd></div>
+          <div><dt id="profile-stat-label">Réussite</dt><dd id="profile-stat-value">—</dd></div>
+        </dl>
+        <div class="profile-milestone">
+          <div class="profile-milestone-heading">
+            <div>
+              <p id="profile-milestone-label">Prochain niveau</p>
+              <h3 id="profile-milestone-title">Mtwassat</h3>
+            </div>
+            <span class="profile-star profile-milestone-star" aria-hidden="true"></span>
+          </div>
+          <progress id="profile-level-progress" aria-label="Progression vers le prochain niveau" value="0" max="60"></progress>
+          <p class="profile-milestone-detail" id="profile-milestone-detail">0 / 60 points</p>
+        </div>
+      </section>
+
+      <section class="profile-card profile-info" aria-labelledby="profile-info-title">
+        <div class="profile-section-heading">
+          <h2 id="profile-info-title">Informations</h2>
+          <button class="profile-button" id="profile-edit-details" type="button" aria-label="Modifier les informations"
+            aria-haspopup="dialog" aria-controls="profile-details-dialog">Modifier</button>
+        </div>
+        <dl class="profile-details">
+          <div><dt>Pseudonyme</dt><dd id="profile-detail-name" dir="auto">Joueur</dd></div>
+          <div><dt>Nom affiché</dt><dd id="profile-detail-display-name" dir="auto">—</dd></div>
+          <div><dt>Ville ou région</dt><dd id="profile-detail-region" dir="auto">—</dd></div>
+          <div><dt>Langue préférée</dt><dd id="profile-detail-language">—</dd></div>
+          <div><dt>Type de profil</dt><dd id="profile-detail-type">Invité</dd></div>
+          <div id="profile-email-row" hidden><dt>Adresse e-mail</dt><dd id="profile-email" dir="auto"></dd></div>
+          <div id="profile-joined-row" hidden><dt>Inscription</dt><dd id="profile-joined"></dd></div>
+          <div class="profile-details-bio"><dt>À propos</dt><dd id="profile-detail-bio" dir="auto">—</dd></div>
+        </dl>
+        <p class="profile-details-status" id="profile-details-status" role="status"></p>
+      </section>
+
+      <section class="profile-card profile-activity" aria-labelledby="profile-activity-title">
+        <div class="profile-section-heading">
+          <h2 id="profile-activity-title">Activité récente</h2>
+          <a class="profile-button" href="history.html" aria-label="Voir tout l’historique">Voir tout</a>
+        </div>
+        <p class="profile-activity-description" id="profile-activity-description">Vos dernières devinettes</p>
+        <ul class="profile-activity-list" id="profile-activity-list" hidden></ul>
+        <p class="profile-empty" id="profile-activity-empty">Vos premières réponses apparaîtront ici après une partie.</p>
+      </section>
+    </div>
+  </main>
+
+  <dialog class="profile-dialog" id="profile-dialog" aria-labelledby="profile-dialog-title">
+    <form id="profile-form">
+      <h2 id="profile-dialog-title">Modifier le profil</h2>
+      <label for="profile-username">Pseudonyme</label>
+      <input id="profile-username" name="username" type="text" maxlength="20" autocomplete="nickname" aria-describedby="profile-form-message" required autofocus dir="auto">
+      <p class="profile-form-message" id="profile-form-message" role="alert"></p>
+      <div class="profile-actions profile-dialog-actions">
+        <button class="profile-button" id="profile-cancel" type="button">Annuler</button>
+        <button class="profile-button profile-button-primary" id="profile-save" type="submit">Enregistrer</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog class="profile-dialog" id="profile-details-dialog" aria-labelledby="profile-details-title" aria-describedby="profile-details-hint">
+    <form id="profile-details-form">
+      <h2 id="profile-details-title">Modifier les informations</h2>
+      <p class="profile-dialog-hint" id="profile-details-hint">Ces informations sont facultatives et enregistrées dans ce navigateur.</p>
+
+      <label for="profile-display-name-input">Nom affiché</label>
+      <input id="profile-display-name-input" type="text" maxlength="50" dir="auto" autofocus>
+
+      <label for="profile-region-input">Ville ou région</label>
+      <input id="profile-region-input" type="text" maxlength="60" dir="auto">
+
+      <label for="profile-language-input">Langue préférée</label>
+      <select id="profile-language-input">
+        <option value="">Choisir une langue</option>
+        <option>Darija</option>
+        <option>Arabe</option>
+        <option>Amazighe</option>
+        <option>Français</option>
+        <option>Anglais</option>
+        <option>Autre</option>
+      </select>
+
+      <label for="profile-bio-input">À propos</label>
+      <textarea id="profile-bio-input" rows="3" maxlength="240" dir="auto" aria-describedby="profile-bio-hint"></textarea>
+      <p class="profile-dialog-hint" id="profile-bio-hint">240 caractères maximum.</p>
+
+      <p class="profile-form-message" id="profile-details-message" role="alert"></p>
+      <div class="profile-actions profile-dialog-actions">
+        <button class="profile-button" id="profile-details-cancel" type="button">Annuler</button>
+        <button class="profile-button profile-button-primary" type="submit">Enregistrer</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog class="profile-dialog profile-images-dialog" id="profile-images-dialog" aria-labelledby="profile-images-title" aria-describedby="profile-images-hint">
+    <form id="profile-images-form">
+      <h2 id="profile-images-title">Modifier les images</h2>
+      <p class="profile-images-hint" id="profile-images-hint">JPG, PNG ou WebP, 15 Mo maximum par image. Vos choix sont enregistrés dans ce navigateur.</p>
+
+      <div class="profile-image-field">
+        <label for="profile-avatar-file">Photo de profil</label>
+        <div class="profile-avatar-editor">
+          <img class="profile-image-preview profile-avatar-preview" id="profile-avatar-preview" src="assets/profile/zellige-avatar.jpg" alt="Aperçu de la photo de profil" width="72" height="72">
+          <input id="profile-avatar-file" type="file" accept="image/jpeg,image/png,image/webp" aria-describedby="profile-avatar-message">
+        </div>
+        <p class="profile-image-message" id="profile-avatar-message" role="status"></p>
+        <button class="profile-button profile-image-reset" id="profile-avatar-reset" type="button" hidden>Rétablir l’avatar</button>
+      </div>
+
+      <div class="profile-image-field">
+        <label for="profile-cover-file">Image de couverture</label>
+        <img class="profile-image-preview profile-cover-preview" id="profile-cover-preview" src="assets/profile/riad-cover.jpg" alt="Aperçu de la couverture" width="1440" height="480">
+        <input id="profile-cover-file" type="file" accept="image/jpeg,image/png,image/webp" aria-describedby="profile-cover-message">
+        <p class="profile-image-message" id="profile-cover-message" role="status"></p>
+        <button class="profile-button profile-image-reset" id="profile-cover-reset" type="button" hidden>Rétablir la couverture</button>
+      </div>
+
+      <p class="profile-image-message" id="profile-images-message" role="alert"></p>
+      <div class="profile-actions profile-dialog-actions">
+        <button class="profile-button" id="profile-images-cancel" type="button">Annuler</button>
+        <button class="profile-button profile-button-primary" id="profile-images-save" type="submit" disabled>Enregistrer</button>
+      </div>
+    </form>
+  </dialog>
+</body>
+</html>

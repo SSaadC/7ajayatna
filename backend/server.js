@@ -9,6 +9,8 @@ const app = express();
 
 // Middlewares globaux
 app.use(cors()); // Autorise le frontend (HTML/JS) à appeler ce serveur
+const profileRoutes = require('./routes/profile');
+app.use('/api/profile', profileRoutes);
 app.use(express.json()); // Permet au serveur de lire les données JSON envoyées dans req.body
 
 const path = require('path');

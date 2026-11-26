@@ -8,6 +8,35 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Nunito:wght@400;600;700;800;900&family=Orbitron:wght@700;900&display=swap" rel="stylesheet" />
+  <style>
+    .profile-game-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .profile-game-link.nav-btn {
+      display: inline-grid;
+      place-items: center;
+      min-inline-size: 2.75rem;
+      min-block-size: 2.75rem;
+      padding: 0;
+      text-decoration: none;
+    }
+
+    .profile-game-link:focus-visible {
+      outline: 2px solid var(--saffron);
+      outline-offset: 2px;
+    }
+
+    .history-game-link { align-self: flex-start; margin: 0 1.2rem 1.2rem; }
+
+    @media (max-width: 720px) {
+      .profile-game-header { flex-wrap: wrap; padding-inline: 0.75rem; gap: 0.45rem; }
+      .profile-game-actions { margin-inline-start: auto; }
+      .profile-game-actions .header-score-pill { padding-inline: 0.5rem; }
+    }
+  </style>
 </head>
 <body>
 
@@ -18,7 +47,7 @@
      EN-TÊTE DU SITE (HEADER)
      =========================== -->
 <header class="site-header">
-  <div class="header-inner">
+  <div class="header-inner profile-game-header">
     <div class="logo">
       <span class="logo-symbol">۞</span>
       <div class="logo-titles">
@@ -34,10 +63,15 @@
       <button class="nav-btn" id="btnLogout" style="color: #E76F51;">🚪 Déconnexion</button>
     </nav>
 
-    <div class="header-score-pill">
-      <span class="pill-label">Score</span>
-      <span class="pill-value" id="headerScore">0</span>
-      <span class="pill-star">★</span>
+    <div class="profile-game-actions">
+      <div class="header-score-pill">
+        <span class="pill-label">Score</span>
+        <span class="pill-value" id="headerScore">0</span>
+        <span class="pill-star">★</span>
+      </div>
+      <a class="nav-btn icon-btn profile-game-link" href="profile.html" aria-label="Mon profil" title="Mon profil">
+        <span aria-hidden="true">👤</span>
+      </a>
     </div>
   </div>
 </header>
@@ -309,6 +343,7 @@
     <div class="history-list" id="historyList">
       <!-- Rempli en JS -->
     </div>
+    <a class="btn btn-secondary history-game-link" href="history.html">Voir l’historique complet</a>
   </div>
 </div>
 
@@ -321,5 +356,6 @@
 <!-- Scripts -->
 <script src="data.js"></script>
 <script src="game.js"></script>
+<script src="profile-sound.js"></script>
 </body>
 </html>
