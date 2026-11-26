@@ -28,6 +28,9 @@ app.get('/api/health', async (req, res) => {
 const authRoutes = require('./routes/auth');
 app.use('/api/auth', authRoutes);
 
+const gameRoutes = require('./routes/game');
+app.use('/api/game', gameRoutes);
+
 // Démarrage du serveur
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
